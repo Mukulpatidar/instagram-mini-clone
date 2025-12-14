@@ -39,6 +39,12 @@ public class UserServiceImpl implements UserService{
 		 return userRepository.findById(id)
 	                .orElseThrow(() -> new RuntimeException("User not found"));
 	}
+
+
+	@Override
+	public boolean matchesPassword(String password, String password2) {
+		return passwordEncoder.matches(password, password2);
+	}
 	
 	
 

@@ -11,4 +11,6 @@ public interface UserService {
 	    Optional<User> findByUsername(String username);
 
 	    User findById(Long id);
+
+		boolean matchesPassword(String password, String password2);
 }

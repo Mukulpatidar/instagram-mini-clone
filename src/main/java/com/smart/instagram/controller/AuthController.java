@@ -29,15 +29,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User loginRequest) {
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+
         return userService.findByUsername(loginRequest.getUsername())
                 .map(user -> {
+
+                    if (!userService.matchesPassword(
+                            loginRequest.getPassword(),
+                            user.getPassword())) {
+
+                        return ResponseEntity
+                                .status(HttpStatus.UNAUTHORIZED)
+                                .body("Invalid password");
+                    }
+
                     String token = JwtUtil.generateToken(user.getUsername());
                     return ResponseEntity.ok(token);
                 })
                 .orElse(
-                    ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body("Invalid credentials")
+                    ResponseEntity
+                            .status(HttpStatus.UNAUTHORIZED)
+                            .body("User not found")
                 );
     }
 	

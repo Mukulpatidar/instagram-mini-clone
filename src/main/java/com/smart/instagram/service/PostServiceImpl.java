@@ -3,6 +3,8 @@ package com.smart.instagram.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.smart.instagram.model.Follow;
 import com.smart.instagram.model.Post;
 import com.smart.instagram.model.User;
@@ -10,6 +12,7 @@ import com.smart.instagram.repository.FollowRepository;
 import com.smart.instagram.repository.PostRepository;
 import com.smart.instagram.repository.UserRepository;
 
+@Service
 public class PostServiceImpl implements PostService{
 
 	

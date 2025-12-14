@@ -3,10 +3,12 @@ package com.smart.instagram.service;
 import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.smart.instagram.model.User;
 import com.smart.instagram.repository.UserRepository;
 
+@Service
 public class UserServiceImpl implements UserService{
 
 	 private final UserRepository userRepository;

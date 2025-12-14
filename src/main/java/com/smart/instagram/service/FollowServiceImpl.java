@@ -1,10 +1,13 @@
 package com.smart.instagram.service;
 
+import org.springframework.stereotype.Service;
+
 import com.smart.instagram.model.Follow;
 import com.smart.instagram.model.User;
 import com.smart.instagram.repository.FollowRepository;
 import com.smart.instagram.repository.UserRepository;
 
+@Service
 public class FollowServiceImpl implements FollowService {
 	
 	 private final FollowRepository followRepository;

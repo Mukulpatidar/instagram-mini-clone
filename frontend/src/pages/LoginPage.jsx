@@ -1,58 +1,60 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await api.post("/api/auth/login", {
-        username,
-        password,
-      });
-
-      // 🔐 Save JWT token
+      const res = await api.post("/auth/login", form);
       localStorage.setItem("token", res.data);
-
-      alert("Login successful");
-      navigate("/"); // redirect to Feed
-    } catch (error) {
-      alert("Invalid username or password");
+      navigate("/");
+    } catch {
+      alert("Invalid credentials");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-logo">Instagram</div>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <br />
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <button type="submit">Log in</button>
+        </form>
 
-      <p>
-        Don’t have an account? <Link to="/signup">Signup</Link>
-      </p>
+        <div className="auth-footer">
+          Don’t have an account? <a href="/signup">Sign up</a>
+        </div>
+      </div>
     </div>
   );
 }

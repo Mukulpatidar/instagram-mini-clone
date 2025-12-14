@@ -1,69 +1,69 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
     try {
-      await api.post("/api/auth/signup", {
-        username,
-        email,
-        password,
-      });
-
-      alert("Signup successful. Please login.");
+      await api.post("/auth/signup", form);
+      alert("Signup successful!");
       navigate("/login");
-    } catch (error) {
-      alert("Signup failed. Username or email may already exist.");
+    } catch {
+      alert("Username or email already exists");
     }
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-logo">Instagram</div>
 
-      <form onSubmit={handleSignup}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <br />
+        <form onSubmit={handleSignup}>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <br />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <br />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Signup</button>
-      </form>
+          <button type="submit">Sign up</button>
+        </form>
 
-      <p>
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
+        <div className="auth-footer">
+          Have an account? <a href="/login">Log in</a>
+        </div>
+      </div>
     </div>
   );
 }

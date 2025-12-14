@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smart.instagram.model.User;
+import com.smart.instagram.security.JwtUtil;
 import com.smart.instagram.service.UserService;
 
 @RestController
@@ -27,14 +28,17 @@ public class AuthController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED); 
     }
 
-    // POST /api/auth/login
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User loginRequest) {
-
         return userService.findByUsername(loginRequest.getUsername())
-                .map(user -> ResponseEntity.ok("LOGIN_SUCCESS_TOKEN_LATER"))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Invalid credentials"));
+                .map(user -> {
+                    String token = JwtUtil.generateToken(user.getUsername());
+                    return ResponseEntity.ok(token);
+                })
+                .orElse(
+                    ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body("Invalid credentials")
+                );
     }
 	
 }
